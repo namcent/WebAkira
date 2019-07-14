@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="jumbotron" style="background-color: rgb(255,255,255,0); margin: 64px;">
+	<div class="container">
+		
+	<div class="row">
+	<div class="col-xs-4"></div>
+	<div class="col-xs-4" style="background: rgba(255,255,255,0.4); height: 420px;">
+		<div class="image-container"></div>
+	<h1 class="text-center" style="font-size: 26px; line-height: 130px;">Login</h1>					
+	<div class="card">
+	<article class="card-body">
+
+	<form method="post" action="/login">
+    <div class="form-group">
+    	<label for="username" style="margin: 0px 0px 10px;">Nombre de usuario:</label>
+        <input type="text" name="username" placeholder="Ingrese su usuario" class="form-control" style="margin: 0px 0px 20px;">
+    </div> <!-- form-group1 -->
+
+    <div class="form-group">  	
+    	<label for="password" style="margin: 0px 0px 10px;">Clave de usuario:</label>
+			<input type="password" name="password" placeholder="Ingrese su clave" class="form-control" style="margin: 0px 0px 20px;">
+    </div> <!-- form-group2 -->
+
+    <div>
+		<a href="/registrar">Crear una cuenta.</a>
+	</div> 
+      
+    <div class="form-group text-center">    	
+        <button class="btn btn-lg btn-primary" id="loginButton" style="font-size: 17px;">Ingresar</button>    	
+    </div> <!-- form-group3 --> 
+
+	</form>
+
+	</article>
+	</div> <!-- card -->
+	</div> <!-- col -->
+	<div class="col-xs-4"></div>
+	</div><!--row -->
+	</div><!--container -->
+</div><!--jumbotron -->
+
+{% endblock %}

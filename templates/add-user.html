@@ -1,0 +1,45 @@
+{% extends "login.html" %}
+
+{% block content %}
+<div class="jumbotron" style="background-color: rgb(255,255,255,0); margin: 64px;">
+  <div class="container">    
+  <div class="row">
+  <div class="col-xs-4"></div>
+  <div class="col-xs-4" style="background: rgba(255,255,255,0.4); height: 420px;">
+    <div class="image-container"></div>
+  <h1 class="text-center" style="font-size: 26px; line-height: 120px;">Agregar usuario</h1>          
+  <div class="card">
+  <article class="card-body">
+
+    <form method="post">
+      <div class="form-group">
+        <label for="username" >Nombre de usuario:</label>
+          <input type="text" name="username" placeholder="Ingrese su usuario" class="form-control">
+      </div> <!-- form-group1 -->
+
+      <div class="form-group">    
+        <label for="password">Clave de usuario:</label>
+        <input type="password" name="password" placeholder="Ingrese su clave" class="form-control">
+      </div> <!-- form-group2 --> 
+        
+        <div class="form-group">    
+        <label for="email">Email:</label>
+        <input type="email" name="email" placeholder="Ingrese su mail" class="form-control">
+      </div> <!-- form-group3 --> 
+
+      <div class="form-group text-center">     
+          <button class="btn btn-lg btn-primary" id="loginButton" type="submit" style="font-size: 17px;">Guardar</button>
+      </div> <!-- form-group4 --> 
+
+    </form>
+    
+  </article>
+  </div> <!-- card -->
+  </div> <!-- col -->
+  <div class="col-xs-4"></div>
+  </div><!--row -->
+  </div><!--container -->
+</div><!--jumbotron -->
+
+  
+{% endblock %}

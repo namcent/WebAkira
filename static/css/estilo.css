@@ -1,0 +1,106 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-family: sans-serif;
+	height: 100%;
+	top: 0;
+	background: linear-gradient(rgba(14,3,237,0.7), rgba(255,5,201,0.9));
+	background-repeat: no-repeat;
+
+}
+
+
+
+.image-container {
+	width: 100px;
+	height: 100px;
+	position: absolute;
+	top: -50px;
+	left: calc(50% - 50px);
+	background-image: url("../imagenes/logo-akira.jpg");
+	background-size: cover;
+	background-position: center;
+	border-radius: 50%;
+
+}
+
+
+
+
+header {
+	width: 100%;
+	background: rgba(30, 48, 89,0.4);
+	height: 60px;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	display: flex;	
+	align-items: center;
+	
+}
+
+figure {
+	margin:20px;
+	display: block;
+}
+
+figure img {
+	width: 115px;
+	height: 31.25px;
+}
+
+nav {
+	margin: 20px auto;
+	width: 100%;
+	
+}
+
+nav ul {
+	list-style: none;
+	display: table;
+	overflow: hidden;
+	float: right;
+}
+
+nav ul li {
+	display: inline-block;
+}
+
+nav ul li a {
+	text-decoration: none;
+	color: white;
+	display: block;
+	line-height: 20px;
+	padding: 20px;
+	position: relative;
+	text-align: center;
+}
+
+nav ul li a:hover {
+	color: grey;
+	text-decoration: none;
+}
+
+
+
+
+
+
+.grid {
+    margin: 0 auto;
+    width: 100%;
+}
+
+.row {
+    width: 100%;    
+}
+
+
+
+

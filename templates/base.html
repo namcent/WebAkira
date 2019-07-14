@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+	<title>{% block title %}{% endblock %}| A K I R A |</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <link rel="shortcut icon" href="{{ url_for('static', filename = 'imagenes/favicon.png') }}" type="image/x-icon">
+    <link rel="icon" href="{{ url_for('static', filename = 'imagenes/favicon.png') }}" type="image/x-icon">
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/estilo.css') }}">
+	
+</head>
+<body>
+	<header>
+        
+        <figure><img src="{{ url_for('static', filename='imagenes/logo-akira.png') }}"></figure>
+                   
+            {% if session.username %}
+            <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/editar">Mis posts</a></li>
+                <li><a href="/agregarPost">Agregar</a></li>
+                <li><a href="/logout">Salir</a></li>
+            </ul>
+            </nav>
+            {% else %}    
+            <nav>
+		    <ul>              
+				<li><a href="/">Home</a></li>
+				<li><a href="/login">Ingresar</a></li>
+                <li><a href="/registrar">Registrarse</a></li>
+			</ul>
+            </nav>
+			
+            {% endif %}
+		
+        
+	</header>
+	
+<main>
+{% block content %}
+
+
+{% endblock %}
+</main>
+
+
+</br>
+<footer>
+    <div class="footer-copyright text-center py-3">
+        <p>A K I R A | Nadia Centanaro | 2018</p>
+    </div>
+</footer>
+
+</body>
+</html>
