@@ -31,7 +31,9 @@
     <div class="form-group text-center">     
         <button class="btn btn-lg btn-primary" id="loginButton" type="submit" style="font-size: 17px;">Guardar Cambios</button>
     </div> <!-- form-group3 --> 
-
+    {% for message in get_flashed_messages() %}
+              <h5>  {{ message }} </h5>
+    {% endfor %}
   </form>
   
   </article>

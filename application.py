@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
-from database import Blog, User, Base
-#tablas de la database
 from flask import session as login_session
+#tablas de la database
+from database import Blog, User, Base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import random
@@ -38,34 +38,12 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-#funciones para hashear la contraseña
-def login_required(f):
-	@wraps(f)
-	def decorated_function(*args, **kwargs):
-		if 'username' not in login_session:
-			return redirect(url_for('login'))
-		return f(*args, **kwargs)
-	return decorated_function
-
-def make_salt():
-	return ''.join(random.choice(
-				string.ascii_uppercase + string.digits) for x in range(32))
-		
-def make_pw_hash(name, pw, salt = None):
-	if not salt:
-		salt = make_salt()
-	h = hashlib.sha256((name + pw + salt).encode('utf-8')).hexdigest()
-	return '%s,%s' % (salt, h)
-
-def valid_pw(name, password, h):
-	salt = h.split(',')[0]
-	return h == make_pw_hash(name, password, salt)
 
 #funciones de las rutas
 #inicio
 @app.route('/')
 def index():
-	posts = session.query(Blog).all()
+	posts = session.query(Blog).all() #trae todas los registros de la tabla Blog de la db
 	if 'username' in login_session:
 		return render_template('index.html',username = login_session['username'], posts=posts)
 	else:
@@ -83,14 +61,14 @@ def login():
 			password = request.form['password']
 			#tomo los datos del form que puso el usuario en el template
 			registro = session.query(User).all()
-			#toma los registros de la tabla user de la database
+			#toma todos los registros de la tabla user de la database
 			for x in registro:
 				if x.username == username: #compara el x.usuario(de la database) con el de la variable de arriba
-					if x and valid_pw(username, password, x.pw_hash):
-						login_session['username'] = username
+					if x and valid_pw(username, password, x.pw_hash): #llama a la funcion que valida el pssword
+						login_session['username'] = username #inicia la sesion
 						return redirect(url_for('index'))#redirecciona a la funcion index
-			print ('no se encontro usuarios registrados')
-			return redirect(url_for('index'))
+			flash ('no se encontraron usuarios registrados')
+			return redirect(url_for('login'))
 
 
 #deslogueo - delete session - elimina la sesion del usuario
@@ -106,12 +84,16 @@ def registrar():
 
 	if request.method == 'GET':
 		return render_template('add-user.html')
-	else:
+	else:                                #inicio guardar datos - hash password
 		if request.method == 'POST':
 			username = request.form['username']
 			password = request.form['password']
 			email = request.form['email']
-
+			registro = session.query(User).all()
+			for x in registro:
+				if x.username == username:
+					flash ('Error. Usuario ya registrado')
+					return redirect(url_for('registrar'))
 
 			pw_hash = make_pw_hash(username, password)
 			nuevoUsuario = User(
@@ -119,8 +101,8 @@ def registrar():
 					email = email,
 					pw_hash=pw_hash) 
 			session.add(nuevoUsuario)
-			session.commit()
-			login_session['username'] = request.form['username']
+			session.commit()             #fin guardar datos - hash password
+			login_session['username'] = request.form['username'] #crea la sesion del usuario
 			flash('Usuario creado correctamente', 'success')
 			return redirect(url_for('index'))
 
@@ -205,16 +187,44 @@ def showMain(id):
 
 @app.route('/editar', methods=['GET'])
 def editar():
+
 	if 'username' in login_session:
-		registro = session.query(User).filter_by(username = login_session['username']).first()
-		posts = session.query(Blog).filter_by(id_user=registro.id).all()
-		return render_template('public.html', posts = posts, username=login_session['username'])	
+		if login_session['username'] == 'admin':
+			posts = session.query(Blog).all()
+			return render_template('public.html', posts = posts, username=login_session['username'])
+		else:
+			registro = session.query(User).filter_by(username = login_session['username']).one()
+			posts = session.query(Blog).filter_by(id_user=registro.id).all()
+			return render_template('public.html', posts = posts, username=login_session['username'])	
 	else:
 		redirect(url_for('index'))
 
+#funciones para hashear la contraseña
+def login_required(f):
+	@wraps(f)
+	def decorated_function(*args, **kwargs):
+		if 'username' not in login_session:
+			return redirect(url_for('login')) #si no esta logueado redirecciona a login
+		return f(*args, **kwargs)
+	return decorated_function
+
+def make_salt():
+	return ''.join(random.choice(
+				string.ascii_uppercase + string.digits) for x in range(32))
+		
+def make_pw_hash(name, pw, salt = None):
+	if not salt:
+		salt = make_salt()
+	h = hashlib.sha256((name + pw + salt).encode('utf-8')).hexdigest()
+	return '%s,%s' % (salt, h)
+
+def valid_pw(name, password, h): #valida el password
+	salt = h.split(',')[0]
+	return h == make_pw_hash(name, password, salt)
+
 #funciones para manejo de errores
 @app.errorhandler(404)
-def error_interno(e):
+def no_encontrado(e):
     return render_template('404.html'), 404
 
 @app.errorhandler(500)
@@ -225,3 +235,4 @@ def error_interno(e):
 if __name__ == ('__main__'):
 	app.secret_key = "secret key"
 	app.run('0.0.0.0', 8080, debug = True)	
+
