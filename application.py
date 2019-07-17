@@ -205,8 +205,8 @@ def showMain(id):
 def editar():
 
 	if 'username' in login_session:
-		if login_session['username'] == 'admin':
-			posts = session.query(Blog).all()
+		if login_session['username'] == 'admin': #verifica si el usuario en la sesion es admin
+			posts = session.query(Blog).all() #si es admin trae todos los posts
 			return render_template('public.html', posts = posts, username=login_session['username'])
 		else:
 			registro = session.query(User).filter_by(username = login_session['username']).one()
