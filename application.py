@@ -84,28 +84,44 @@ def registrar():
 
 	if request.method == 'GET':
 		return render_template('add-user.html')
-	else:                                #inicio guardar datos - hash password
+	else:                                
 		if request.method == 'POST':
 			username = request.form['username']
 			password = request.form['password']
 			email = request.form['email']
 			registro = session.query(User).all()
+			
+			#valido que los campos no esten vacios			
+			if username == '':
+					flash("Ingrese un usuario")
+					return redirect(url_for('registrar'))
+			if password == '':
+					flash("Ingrese un password")
+					return redirect(url_for('registrar'))
+			if email == '':
+					flash("Ingrese un email")
+					return redirect(url_for('registrar'))
+					
+			#valido que los usuarios y el email no esten registrados				
 			for x in registro:
 				if x.username == username:
 					flash ('Error. Usuario ya registrado')
 					return redirect(url_for('registrar'))
-
-			pw_hash = make_pw_hash(username, password)
-			nuevoUsuario = User(
-					username = username,
-					email = email,
-					pw_hash=pw_hash) 
-			session.add(nuevoUsuario)
-			session.commit()             #fin guardar datos - hash password
-			login_session['username'] = request.form['username'] #crea la sesion del usuario
-			flash('Usuario creado correctamente', 'success')
-			return redirect(url_for('index'))
-
+				else:
+					if x.email == email:
+						flash ('Error. Email ya registrado')
+						return redirect(url_for('registrar'))
+					else:			
+						pw_hash = make_pw_hash(username, password)
+						nuevoUsuario = User(
+								username = username,
+								email = email,
+								pw_hash=pw_hash) 
+						session.add(nuevoUsuario)
+						session.commit()             
+						login_session['username'] = request.form['username'] #crea la sesion del usuario
+						flash('Usuario creado correctamente', 'success')
+						return redirect(url_for('index'))
 #creacion de post
 @app.route('/agregarPost', methods=['GET', 'POST'])
 def agregarPost():
