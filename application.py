@@ -151,6 +151,20 @@ def agregarPost():
 	else:
 		return redirect(url_for('index'))
 
+#mostrar los posteos del usuario
+@app.route('/editar', methods=['GET'])
+def editar():
+
+	if 'username' in login_session:
+		if login_session['username'] == 'admin': #verifica si el usuario en la sesion es admin
+			posts = session.query(Blog).all() #si es admin trae todos los posts
+			return render_template('public.html', posts = posts, username=login_session['username'])
+		else:
+			registro = session.query(User).filter_by(username = login_session['username']).one()
+			posts = session.query(Blog).filter_by(id_user=registro.id).all()
+			return render_template('public.html', posts = posts, username=login_session['username'])	
+	else:
+		redirect(url_for('index'))
 
 #edicion de post
 @app.route('/blog/editar/<int:id>',methods=['POST','GET'])
@@ -190,32 +204,7 @@ def eliminarPost(id):
 	else:
 		return redirect(url_for('index'))
 
-#funcion mostrar ppal
-@app.route('/public/<int:id>', methods=['GET'])
-def showMain(id):
-
-	posts = session.query(Blog).filter_by(id_user=id).all() 
-	
-	if 'username' in login_session:
-		username = login_session['username']
-		return render_template('public.html', posts = posts, username=username)	
-	else:
-		return render_template('public.html', posts = posts)
-
-@app.route('/editar', methods=['GET'])
-def editar():
-
-	if 'username' in login_session:
-		if login_session['username'] == 'admin': #verifica si el usuario en la sesion es admin
-			posts = session.query(Blog).all() #si es admin trae todos los posts
-			return render_template('public.html', posts = posts, username=login_session['username'])
-		else:
-			registro = session.query(User).filter_by(username = login_session['username']).one()
-			posts = session.query(Blog).filter_by(id_user=registro.id).all()
-			return render_template('public.html', posts = posts, username=login_session['username'])	
-	else:
-		redirect(url_for('index'))
-
+		
 #funciones para hashear la contraseña
 def login_required(f):
 	@wraps(f)
