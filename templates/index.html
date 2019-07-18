@@ -16,7 +16,7 @@
              
                 <div class="col-md-4">
                 <div class="card mb-4 box-shadow" style="background-color: rgb(255,255,255,0.5); padding: 10px; margin: 20px;">
-                  <p>{{post.titulo}}</p>
+                  <p style="font-size: 16px; color: black;">{{post.titulo}}</p>
                   {% if post.foto != None %}
                     <img class="card-img-top" src="{{ url_for('static', filename='imagenes/img-posts/'+post.foto) }}" style="height: 150px; width: 150px; display: block;" data-holder-rendered="true">
                   {% else %}
@@ -26,7 +26,8 @@
                     <p class="card-text">{{post.contenido}}</p>
                     <div class="d-flex justify-content-between align-items-center">
                       
-                      <small class="text-muted">{{post.fecha_creacion}}</small>
+                      <small class="text-muted">{{post.fecha_creacion}}</small><br>
+                      <small class="text-muted">Creado por: {{post.id_user}}</small>
                     </div>
                   </div>
                 </div>

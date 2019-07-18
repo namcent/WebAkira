@@ -130,19 +130,20 @@ def agregarPost():
 			return render_template('add-post.html')
 		else:
 			if request.method == 'POST':
-				registro = session.query(User).filter_by(username = login_session['username']).first()
+				registro = session.query(User).filter_by(username = login_session['username']).one()
 				post=Blog(
 						titulo = request.form['titulo'],
 						contenido = request.form['contenido'],
 						fecha_creacion = datetime.datetime.now(),
 						id_user = registro.id)
 				
-				if 'foto' in request.files:
+				if 'foto' in request.files: #verifico que haya una img cargada
 					file = request.files['foto']
-					if file and allowed_file(file.filename):
+					if file and allowed_file(file.filename): #verifico que tenga el formato permitido
 						filename = secure_filename(file.filename)
-						file.save(os.path.join(UPLOAD_FOLDER, filename))
+						file.save(os.path.join(UPLOAD_FOLDER, filename)) #lo guarda en la carpeta de img de posts
 						post.foto = filename
+
 				session.add(post)
 				session.commit()
 				flash('Post creado correctamente', 'success')

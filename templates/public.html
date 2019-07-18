@@ -12,7 +12,7 @@
   </div>
 {% else %}
   {% for post in posts %}
-    <div class="col-md-4">
+    <div class="col-md-4" style="height: 100vh">
               <div class="card mb-4 box-shadow" style="background-color: rgb(255,255,255,0.2); padding: 10px; margin: 20px;">
                 <p class="lead">{{post.titulo}}</p>
                 {% if post.foto != None %}
@@ -26,8 +26,9 @@
                     <div class="btn-group">
                       <a href="/blog/editar/{{post.id}}" class="btn btn-success">Editar</a>
                       <a href="/blog/eliminar/{{post.id}}" class="btn btn-danger">Eliminar</a>
-                    </div>
-                    <small class="text-muted">{{post.fecha_creacion}}</small>
+                    </div><br>
+                    <small class="text-muted">{{post.fecha_creacion}}</small><br>
+                    <small class="text-muted">Creado por: {{post.id_user}}</small>
                   </div>
                 </div>
               </div>
