@@ -1,16 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask import session as login_session
 #tablas de la database
-from database import Blog, User, Base
-from sqlalchemy import create_engine
+from database import Blog, User, Base, engine
 from sqlalchemy.orm import sessionmaker
 import random
 import string
 import hashlib
 from werkzeug.utils import secure_filename
 import os
-
-from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
 
 import json
 import datetime
@@ -32,7 +29,6 @@ def allowed_file(filename):
 		filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 #conexion a la database y creacion de database_session
-engine = create_engine('postgresql://admin:12345678@localhost/ejemplo')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
